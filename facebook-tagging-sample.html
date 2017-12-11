@@ -1,0 +1,112 @@
+<html>
+<head>
+<title>Test api Facebook</title>
+</head>
+<body>
+<script type="text/javascript">
+    <!-- Begin comScore DAx STANDARD-->
+		// <![CDATA[
+		function udm_(a){var b="comScore=",c=document,d=c.cookie,e="",f="indexOf",g="substring",h="length",i=2048,j,k="&ns_",l="&",m,n,o,p,q=window,r=q.encodeURIComponent||escape;if(d[f](b)+1)for(o=0,n=d.split(";"),p=n[h];o<p;o++)m=n[o][f](b),m+1&&(e=l+unescape(n[o][g](m+b[h])));a+=k+"_t="+ +(new Date)+k+"c="+(c.characterSet||c.defaultCharset||"")+"&c8="+r(c.title)+e+"&c7="+r(c.URL)+"&c9="+r(c.referrer),a[h]>i&&a[f](l)>0&&(j=a[g](0,i-8).lastIndexOf(l),a=(a[g](0,j)+k+"cut="+r(a[g](j+1)))[g](0,i)),c.images?(m=new Image,q.ns_p||(ns_p=m),m.src=a):c.write("<","p","><",'img src="',a,'" height="1" width="1" alt="*"',"><","/p",">")}
+		udm_('http'+(document.location.href.charAt(4)=='s'?'s://sb':'://b')+'.scorecardresearch.com/p?c1=2&c2=xxxxxxx&ns_site=xxxx&name=facebook.api.test');
+		// ]]>
+    </script>
+    <noscript>
+        <p>
+            <img src="http://b.scorecardresearch.com/p?c1=2&amp;c2=xxxxxxx&amp;ns_site=xxxx&name=facebook.api.test" height="1" width="1" alt="*">
+        </p>
+    </noscript>
+    <!-- End comScore DAx STANDARD -->
+<div id="fb-root"></div>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript">
+  window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+        appId: '329866957178092', // App ID from the app dashboard
+        status: true, // Check Facebook Login status
+        xfbml: true, // Look for social plugins on the page
+        cookie: true,
+        oauth: true
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+};
+
+// Load the SDK asynchronously
+(function() {
+    // If we've already installed the SDK, we're done
+    if(document.getElementById('facebook-jssdk')) {
+        return;
+    }
+    // Get the first script element, which we'll use to find the parent node
+    var firstScriptElement = document.getElementsByTagName('script')[0];
+
+    // Create a new script element and set its id
+    var facebookJS = document.createElement('script');
+    facebookJS.id = 'facebook-jssdk';
+
+    // Set the new script's source to the source of the Facebook JS SDK
+    facebookJS.src = '//connect.facebook.net/en_US/all.js';
+
+    // Insert the Facebook JS SDK into the DOM
+    firstScriptElement.parentNode.insertBefore(facebookJS, firstScriptElement);
+}());
+
+setTimeout(function() {
+
+	String.prototype.hashCode = function() {
+	  for(var ret = 0, i = 0, len = this.length; i < len; i++) {
+		ret = (31 * ret + this.charCodeAt(i)) << 0;
+	  }
+	  return ret;
+	};
+    FB.login(function(response) {
+        if(response.authResponse) {
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', function(response) {
+                alert('Good to see you, ' + response.name + '.');
+                udm_("https://sb.scorecardresearch.com/p?c1=2&c2=1234567&ns_site=your-site&name=news.index&ns_type=hidden&ns_so_nw=facebook&ns_so_ev=status&ns_so_ai=" +uid + "&ns_so_tn=connected");
+            });
+        } else {
+            alert('User cancelled login or did not fully authorize.');
+        }
+        FB.getLoginStatus(function(response) {
+            if(response.status === 'connected') {
+
+                // the user is logged in and has authenticated your
+                // app, and response.authResponse supplies
+                // the user's ID, a valid access token, a signed
+                // request, and the time the access token 
+                // and signed request each expire
+                var uid = response.authResponse.userID;
+                var accessToken = response.authResponse.accessToken;
+                alert("it is connected");
+                udm_("https://sb.scorecardresearch.com/p?c1=2&c2=1234567&ns_site=your-site&name=news.index&ns_type=hidden&ns_so_nw=facebook&ns_so_ev=status&ns_so_ai=" +
+                    uid + "&ns_so_tn=connected");
+            } else if(response.status === 'not_authorized') {
+                // the user is logged in to Facebook, 
+                // but has not authenticated your app
+                alert("isn't auth");
+
+            } else {
+                // the user isn't logged in to Facebook.
+                alert("isn't logged in the facebook");
+
+            }
+            FB.Event.subscribe('message.send', function(response) {
+                udm_("http://b.scorecardresearch.com/p?c1=2&c2=1234567&ns_site=your-site&name=news.index&ns_type=hidden&ns_so_nw=facebook&ns_so_ev=send&ns_so_ai=" + uid + "&ns_so_tn=connected");
+            });
+
+            FB.Event.subscribe('edge.create', function(response) {
+                udm_("http://b.scorecardresearch.com/p?c1=2&c2=1234567&ns_site=your-site&name=news.index&ns_type=hidden&ns_so_nw=facebook&ns_so_ev=like&ns_so_ai=" +
+                    uid + "&ns_so_tn=connected");
+            });
+        });
+    });
+}, 5000);
+</script>
+<fb:like></fb:like>
+<fb:send></fb:send>
+</body>
+
+</html>
